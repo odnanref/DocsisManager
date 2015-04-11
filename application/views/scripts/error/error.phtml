@@ -1,0 +1,76 @@
+<?php
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and 
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ * 
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Zend Framework Default Application</title>
+</head>
+<body>
+  <h1>An error occurred</h1>
+  <h2><?php echo $this->message ?></h2>
+
+
+<?php
+if (isset($this->exception) && $this->exception !== null ) {
+?>
+  
+  <h3>Exception information:</h3>
+  <p>
+      <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+  </p>
+
+  <h3>Stack trace:</h3>
+  <pre><?php echo $this->exception->getTraceAsString() ?>
+  </pre>
+
+  <h3>Request Parameters:</h3>
+  <pre><?php echo $this->escape(var_export($this->request->getParams(), true)) ?>
+  </pre>
+
+  <?php } ?>
+
+  <h1>An error occurred</h1>
+  <h2><?= $this->message ?></h2>
+
+<?php if ( '1production' != APPLICATION_ENV && isset( $this->exception )) { ?>
+    <h3>Exception information:</h3>
+    <p>
+        <b>Message:</b> <?= $this->exception->getMessage( ) ?>
+    </p>
+    <h3>Request Parameters:</h3>
+    <pre><? var_dump( $this->request->getParams( )) ?></pre>
+
+    <h3>Stack Trace 2:</h3>
+    <?php
+    foreach( $this->exception->getTrace( ) as $t) {
+        var_dump( $t);
+    }
+ }
+
+ ?>
+</body>
+</html>

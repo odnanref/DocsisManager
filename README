@@ -1,0 +1,16 @@
+Docsis Manager
+
+Simple cable modem manager database tables based on docsis_server with a few 
+aditions this was developed to replaced a docsis_server for a isc-dhcp-server
+install + tftp server + tod etc...
+
+View the docs directory for details.
+
+I'm not developing this project anylonger but it's still being used by a small
+cable operator. This version has small aditions that aren't present in the 
+original.
+
+It originally ran on a VM with 512MB RAM 1 CPU qemu-kvm debian connected to a NFS
+server where the files were stored.
+
+

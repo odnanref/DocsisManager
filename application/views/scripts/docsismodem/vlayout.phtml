@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+$this->tabContainer()->captureStart('main-container',
+                                    array('design' => 'headline'),
+                                    array(
+                                        "tabPosition" => 'left',
+                                        'style'=>'height: 600px;width:800px'
+                                     ));
+
+echo $this->contentPane(
+ 'form1',
+ $this->form,
+ array('region' => 'top','title'=>'Modem Info'),
+ array('style' => 'background-color: white;')
+);
+
+//$join = $this->render("group/join.phtml");
+//$join = $this->formRemoteQuery;
+$join = $this->render("docsismodem/remote.phtml");
+
+echo  $this->contentPane(
+     'getremote',
+     $join,
+     array('region' => 'left', 'title'=>'Remoto'),
+     array('style' => 'width: 200px; background-color: white;')
+    );
+
+$join = $this->formLeaseQuery;
+
+$this->controller   = "docsismodem";
+$this->idfield      = "idlease";
+$this->resultado    = $this->LeaseData;
+$this->columns      = array(
+    'idlease'   => '#ID'
+    , 'data'     => 'Data'
+    , 'ip'      => 'IP'
+    , 'macaddr' => 'Mac PC'
+    , 'remoteid' => 'Remote Mac'
+    );
+
+$join .= "<div style=\"width: 700px; height: 300px;\">\n";
+$join .= $this->render("index.phtml"); // index.phtml handles several types
+$join .= "</div>\n";
+
+echo $this->contentPane(
+ 'lastreg',
+ $join,
+ array('region' => 'center','title'=>'Últimos registos'),
+ array('style' => 'background-color: white;')
+);
+
+$join = $this->formrxtx;
+
+$this->controller   = "docsismodem";
+$this->idfield      = "idtx";
+$this->resultado    = $this->Signal;
+$this->columns      = array(
+    'idtx'   => '#ID'
+    , 'data'     => 'Data'
+    , 'tx'      => 'TX'
+    , 'rx'      => 'RX'
+    , 'snr'     => 'SNR'
+    );
+
+$join .= "<div style=\"width: 600px; height: 300px;\">\n";
+$join .= $this->render("docsismodem/rxtx.phtml");
+$join .= "</div>\n";
+
+echo $this->contentPane(
+ 'rxtxrecords',
+ $join,
+ array('region' => 'center','title'=>'Hist. Sinal'),
+ array('style' => 'background-color: white;')
+);
+
+echo $this->tabContainer()->captureEnd('main-container');

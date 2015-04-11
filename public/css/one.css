@@ -1,0 +1,293 @@
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+/*
+    Document   : one
+    Created on : 21/Nov/2011, 22:08:37
+    Author     : andref
+    Description:
+        Style sheet for webapp
+*/
+
+body {
+    font-family: Verdana, Arial;
+    font-size: 10px;
+}
+
+/*ul li {
+    display: inline-block;
+    list-style-type: none;
+    padding: 2px;
+    padding-left: 2px;
+    margin: 0px;
+    background:#D3E4E5;
+}
+
+li:hover {
+    display: inline-block;
+    list-style-type: none;
+    background:#99BCBF;
+    color:#000000;
+}*/
+
+select input {
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    font-size: 10px;
+}
+
+option {
+    background-color: #fff;
+}
+/*
+label {
+    font-size: 12px;
+    font-weight: bold;
+    background:#D3E4E5;
+}
+
+legend {
+
+}
+
+label:hover {
+    background:#99BCBF;
+}
+*/
+.hidden {
+    display: none;
+}
+
+a:link {
+	color: black;
+    text-decoration: none;
+}
+
+a:visited {
+	color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #B3AE94;
+    text-decoration: underline;
+}
+
+fieldset {
+
+}
+
+.disabled-back {
+    background-color: grey;
+    text-decoration: line-through;
+}
+
+#table-design {
+	border: 1px solid #DFDFDF;
+	background-color: #F9F9F9;
+	width: 100%;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	font-family: Arial,"Bitstream Vera Sans",Helvetica,Verdana,sans-serif;
+	color: #333;
+}
+#table-design td, #table-design th {
+	border-top-color: white;
+	border-bottom: 1px solid #DFDFDF;
+	color: #555;
+}
+#table-design th {
+	text-shadow: rgba(255, 255, 255, 0.796875) 0px 1px 0px;
+	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	font-weight: normal;
+	padding: 7px 7px 8px;
+	text-align: left;
+	line-height: 1.3em;
+	font-size: 14px;
+    height: 52px;
+}
+#table-design td {
+	font-size: 12px;
+	padding: 4px 7px 2px;
+	vertical-align: top;
+}
+
+#preloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin:0;
+    padding:0;
+    background:#aaa;
+    z-index:999;
+}
+
+#preloaderContent {
+    position: absolute;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 25px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+
+/* http://www.jankoatwarpspeed.com/post/2008/05/22/CSS-Message-Boxes-for-different-message-types.aspx */
+.info, .success, .warning, .error, .validation, .hint {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+    border: 1px solid;
+    margin: 5px 0px;
+    padding: 10px 10px 10px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    border-radius: 10px;
+}
+.info {
+color: #00529B;
+background-color: #BDE5F8;
+background-image: url('/img/info.png');
+}
+.success {
+color: #4F8A10;
+background-color: #DFF2BF;
+background-image:url('/img/success.png');
+}
+.warning {
+color: #9F6000;
+background-color: #FEEFB3;
+background-image: url('/img/warning.png');
+}
+.error {
+color: #D8000C;
+background-color: #FFBABA;
+background-image: url('/img/error.png');
+}
+.validation {
+color: #D63301;
+background-color: #FFCCBA;
+background-image: url('/img/validation.png');
+}
+
+/* Zend Form Styling */
+	dl.zend dt, dd { min-height: 30px; }
+	dl.zend_form dt {
+		float: left;
+		clear: left;
+		text-align: right;
+	}
+	dl.zend_form dt label.required { font-weight: 600; }
+	dl.zend_form dd {
+		float: left;
+		clear: right;
+		padding-left: 5px;
+	}
+
+	dl.zend_form dd ul.errors {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	dl.zend_form dd ul.errors li {
+		float: left;
+		margin: 0 0.15em;
+		font-size: 12px;
+		color: #666666;
+        width: 200px;
+	}
+
+.hint {
+
+    width: 40%;
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image:url('/img/info.png');
+}
+
+#table-design1 {
+	border: 1px solid #DFDFDF;
+	background-color: #F9F9F9;
+	width: 45%;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	font-family: Arial,"Bitstream Vera Sans",Helvetica,Verdana,sans-serif;
+	color: #333;
+}
+#table-design1 td, #table-design1 th {
+	border-top-color: white;
+	border-bottom: 1px solid #DFDFDF;
+	color: #555;
+}
+#table-design1 th {
+	text-shadow: rgba(255, 255, 255, 0.796875) 0px 1px 0px;
+	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	font-weight: normal;
+	padding: 7px 7px 8px;
+	text-align: left;
+	line-height: 1.3em;
+	font-size: 14px;
+    height: 52px;
+}
+#table-design1 td {
+	font-size: 12px;
+	padding: 4px 7px 2px;
+	vertical-align: top;
+}
+
+#remotecmscreen input {
+    border: 0.1em solid #dadada;
+    font-size: 1em;
+}
+
+#remotecmscreen input:hover {
+    border: 1px solid #dadada;
+    font-size: 1em;
+    background-color: #e9f4fe;
+}
+
+#remotecmscreen textarea {
+    border: 0.1em solid #dadada;
+    font-size: 1em;
+}
+
+#remotecmscreen textarea:hover {
+    border: 1px solid #dadada;
+    font-size: 1em;
+    background-color: #e9f4fe;
+}
+
+#remotecmscreen input[name="rq-tx"]
+,input[name="rq-snr"]
+,input[name="rq-rx"]
+,input[name="rq-microreflections"]
+{
+    background-color: #C4CCD2;
+    color: #fff;
+    font-weight: bold;
+}

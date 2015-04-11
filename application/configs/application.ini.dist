@@ -1,0 +1,118 @@
+[production]
+
+includePaths.library = APPLICATION_PATH "/../library"
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+
+resources.modules[] =
+
+appnamespace = "DM"
+
+autoloadernamespaces.far = "Far_"
+;autoloadernamespaces.bvb = "Bvb_"
+autoloadernamespaces.Symfony = "Symfony"
+autoloadernamespaces.Bzeiss = "Bzeiss"
+
+resources.frontController.plugins.Identity = "Users_Plugin_Identity"
+resources.frontController.plugins.Access = "Users_Plugin_Access"
+;Add the libray/MyResource folder to the plugin search path:
+pluginPaths.Far_Resource_EventDispatcher = APPLICATION_PATH "/../library/Far/Resource/EventDispatcher.php"
+resources.Far_Resource_EventDispatcher = true;
+
+resources.frontController.controllerDirectory.default   = APPLICATION_PATH "/controllers"
+
+resources.frontController.moduleControllerDirectoryName = "controllers"
+
+resources.db.adapter         = pdo_mysql
+resources.db.params.host     = 10.252.0.2
+resources.db.params.username = username_db
+resources.db.params.password = password_db
+resources.db.params.dbname   = dhcp
+resources.db.params.isDefaultTableAdapter = true
+resources.db.params.profiler.class = "Far_Db_Profiler"
+resources.db.params.profiler.enabled = true
+;resources.db.params.defaultMetadataCache = "database"
+
+; set up the cache
+resources.cachemanager.db.frontend.name = Core
+resources.cachemanager.db.frontend.options.lifetime = 7200
+resources.cachemanager.db.frontend.options.automatic_serialization = true
+resources.cachemanager.db.backend.name = File
+resources.cachemanager.db.backend.options.cache_dir = APPLICATION_PATH "/../cache/db"
+
+; set up database resource
+resources.db.defaultMetadataCache = "db"
+
+resources.view.encoding = "UTF-8"
+resources.view.charset = "UTF-8"
+resources.view.default.basePath = APPLICATION_PATH "/views/"
+resources.view.helperPath.DM_Zend_View_Helper = APPLICATION_PATH "/views/helpers/"
+
+
+resources.dojo.enable = true
+
+resources.layout.layout = "layout"
+resources.layout.layoutPath = APPLICATION_PATH "/views/scripts"
+
+resources.frontController.moduleDirectory = APPLICATION_PATH "/modules"
+
+; set locale
+resources.locale.default    = "pt_BR"
+resources.locale.force      = true
+
+; Set the translate adapter
+resources.translate.adapter = "Array"
+resources.translate.content = APPLICATION_PATH "/resources/languages/"
+resources.translate.scan    = "directory"
+resources.translate.locale  = "pt_BR"
+
+;resources.locale.cache   = "default"
+;resources.translate.cache   = "default"
+
+; Options for Zend_Translate and it's adapters
+;resources.translate.options.clear = false
+;resources.translate.options.disableNotices = false
+;resources.translate.options.ignore = "."
+;resources.translate.options.logUntranslated = false
+;resources.translate.options.reload = false
+;resources.translate.options.route =
+;resources.translate.options.scan =
+resources.translate.options.tag = "Zend_Translate"
+
+; Config for reporting errors via e-mail
+emailalert.transport    = "localhost"
+emailalert.server       = "localhost" ; not fully supported only localhost is supported
+;emailalert.username     = "someemail@localhost.localdomain"
+;emailalert.password     = ""
+;emailalert.ssl          = 
+;emailalert.port         = 25
+emailalert.from         = "alert@localhost.localdomain"
+emailalert.to[]         = "netriver@localhost.localdomain"
+
+; Configuration for Docsis CM Templates
+docsis.snmpwrite        = ".ptwrite12"
+docsis.snmpread         = ".pt1"
+docsis.swupgradeserver  = "10.252.0.3"
+docsis.voipserver[]     = "82.102.60.5"
+
+[staging : production]
+
+
+
+[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1
+
+resources.db.adapter         = pdo_mysql
+resources.db.params.host     = 127.0.0.1
+resources.db.params.username = root
+resources.db.params.password =
+resources.db.params.dbname   = dhcp
+

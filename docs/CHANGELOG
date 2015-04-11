@@ -1,0 +1,6 @@
+* sql.txt
+	- equipment table add idmodel int
+	- pack table add downloadspeed varchar(40), uploadspeed varchar(40)
+	- pack table add prebuilt_file varchar(254)
+	- service table add linenumber int;
+

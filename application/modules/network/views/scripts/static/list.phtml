@@ -1,0 +1,30 @@
+<script type="text/Javascript">
+    function escolher(event)
+    {
+    	selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+    	//Not sure if this is the most efficient way but it worked for me
+    	selected_id = grid.store.getValue(selected_item, "ipaddr");
+    	location.href = "/network/static/add/id/"+selected_id;
+    }    
+</script>
+
+<div dojoType="dojo.data.ItemFileReadStore" jsId="jsonStore" 
+     url="/network/static/getajax/" id="store" />
+
+<table dojoType="dojox.grid.DataGrid" id="gridNode" jsid="grid" 
+       query="{ ipaddr: '*' }" store="jsonStore"
+       selectionMode="single" autoWidth="true"
+       style="width: 100%; height: 400px" onRowDblClick='escolher();'>
+<thead>
+<tr>
+    <th field="ipaddr" width="150">IP</th>
+    <th field="macaddr" width="150">Mac do CPE</th>
+    <th field="cmts_vlan">CMTS_VLAN</th>
+    <th field="subnum">Subnum</th>
+    <th field="network" width="150">Rede</th>
+    <th field="gateway" width="150">Router</th>
+    <th field="cmts_ip" width="150">CMTS</th>
+</tr>
+</thead>
+</table>

@@ -1,0 +1,147 @@
+<?php
+    $me = new ReflectionObject($this);
+    if ( $me->hasProperty("nstore") ) {
+        $nstore = $this->nstore; // allows me a bit of code re-using 
+    } else {
+        $nstore = 0;
+    }
+?>
+
+<script type="text/Javascript">
+    
+    var nstore = <?php print $nstore ?>;
+    
+    function escolher(event)
+    {
+        grid = dojo.byId("gridNode"+nstore);
+    	selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+    	//Not sure if this is the most efficient way but it worked for me
+    	selected_id = grid.store.getValue(selected_item, "idacuser");
+    	location.href = "/users/group/v/id/"+selected_id;
+    }
+    
+</script>
+
+<store dojoType="dojo.data.ItemFileWriteStore" jsId="jsonStore<?php print $nstore ?>" 
+     url="/users/user/loadUsersGroup/id/<?php print $this->idacuser ?>/type/<?= ($nstore > 0 ? 'ingroup' : 'notingroup') ?>"
+     id="store<?php print $nstore ?>" />
+
+<table dojoType="dojox.grid.DataGrid" id="gridNode<?php print $nstore ?>" jsid="grid<?php print $nstore ?>" 
+       query="{ idacgroup: '*' }" store="jsonStore<?php print $nstore ?>"
+       selectionMode="multiple" autoWidth="true"
+       onRowDblClick="escolher();"
+       style="width: 100%; height: 200px;">
+<thead>
+<tr>
+    <th field="idacgroup">#ID</th>
+    <th field="name" width="150px">Nome</th>
+</tr>
+</thead>
+</table>
+ 
+<form dojoType="dijit.form.Form" id="myForm<?php print $nstore ?>"
+            encType="multipart/form-data" 
+            action="/users/user/<?php print ($nstore > 0)?'un':'' ?>join/id/<?php print $this->idacuser ?>" 
+            method="post"
+            >
+    <button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave">
+     <?php
+        if ($nstore > 0 ) {
+            print "Remover do grupo";
+        } else {
+            print "Anexar ao Grupo";
+        }
+     ?>
+     <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+         dojo.stopEvent(evt);
+         
+         dojo.query('#myForm<?php print $nstore ?> > input[type="hidden"]').forEach(
+            function(node, index, arr){
+                console.debug(" OI " + node.innerHTML);
+            });
+         
+         var joinList = [];
+         var nstore = <?php print $nstore ?>;
+             /* Get all selected items from the Grid: */
+             grid = dijit.byId("gridNode"+nstore);
+             var items = grid.selection.getSelected();
+             if(items.length){
+                 /* Iterate through the list of selected items.
+                    The current item is available in the variable
+                    "selectedItem" within the following function: */
+                 dojo.forEach(items, function(selectedItem){
+                     if(selectedItem !== null){
+                         /* Iterate through the list of attributes of each item.
+                            The current attribute is available in the variable
+                            "attribute" within the following function: */
+                         dojo.forEach(grid.store.getAttributes(selectedItem), function(attribute){
+                             /* Now, you can do something with this attribute/value pair.
+                                Our short example shows the attribute together
+                                with the value in an alert box, but we are sure, that
+                                you'll find a more ambitious usage in your own code:*/
+                             //alert('attribute: ' + attribute + ', value: ' + value);
+                             if (attribute == 'idacgroup') {
+                                /* Get the value of the current attribute:*/
+                                var value = grid.store.getValues(selectedItem, attribute);
+                                joinList.push(value);
+                             }
+                         }); /* end forEach */
+                     } /* end if */
+                 }); /* end forEach */
+             } /* end if */
+             
+             var len = joinList.length;
+             for (i=0; i < len; i++ ) {
+                a = dojo.create("input", { 
+                type: "hidden", 
+                name: "join[]", 
+                value: joinList[i] 
+                }
+                , dojo.byId("myForm<?php print $nstore ?>")
+                );
+                
+             }
+             
+             var xhrArgs = {
+                url: "/users/user/<?php print ($nstore > 0)?'un':'' ?>join/id/<?php print $this->idacuser ?>",
+                form: dojo.byId("myForm<?php print $nstore ?>"),
+                handleAs: "text",
+                load: function(data) {
+                    dojo.byId("response").innerHTML = "Form posted.";
+                },
+                error: function(error){
+                    dojo.byId("response").innerHTML = "Form post fail.";
+                }
+             }
+             // Call the asynchronous xhrPost
+             dojo.byId("response").innerHTML = "Form being sent..."
+             var deferred = dojo.xhrPost(xhrArgs);
+
+             dojo.query('.dojoxGrid').forEach(
+             function(node, index, arr) {
+                djObj = dijit.byId(node.id);
+                if (djObj.selection !== null) {
+                    djObj.selection.clear();
+                }
+                var tmp_id = node.id.charAt( node.id.length-1 );
+                
+                if (tmp_id <= 0 ) {
+                    jsonStore0.clearOnClose = true;
+                    jsonStore0.close();
+                    djObj.setStore(null);
+                    djObj.setStore( jsonStore0 );
+                } else {
+                    jsonStore1.clearOnClose = true;
+                    jsonStore1.close();
+                    
+                    djObj.setStore(null);
+                    djObj.setStore( jsonStore1 );
+                }
+             });
+             
+         </script>
+    </button>
+</form>
+
+<div id="response"></div>

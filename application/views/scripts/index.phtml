@@ -1,0 +1,86 @@
+<?php
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and 
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ * 
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ */
+?>
+<script type="text/Javascript">
+    function escolher(event)
+    {
+    	selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+    	//Not sure if this is the most efficient way but it worked for me
+    	selected_id = grid.store.getValue(selected_item, "<?php print $this->idfield ?>");
+    	location.href = "/users/<?php print $this->controller ?>/v/id/"+selected_id;
+    }    
+</script>
+<?php
+$obj = new ReflectionObject($this);
+
+if ( $obj->hasProperty("resultado") && !empty($this->resultado)) {
+?>
+<script type='text/Javascript'>    
+ jsonData<?php print $this->idfield ?> = <?php print $this->resultado ?>;
+</script>
+
+<stores dojoType="dojo.data.ItemFileReadStore" jsId="jsonStore<?php print $this->idfield ?>"
+            data="jsonData<?php print $this->idfield ?>"
+            id="store<?php print $this->idfield ?>"
+/>
+<?php
+} else {
+?>
+
+<stores dojoType="dojo.data.ItemFileReadStore" 
+        jsId="jsonStore<?php print $this->idfield ?>" 
+        url="/<?php print $this->controller ?>/getajax" 
+        id="store<?php print $this->idfield ?>" 
+/>
+<?php
+}
+
+?>
+<table dojoType="dojox.grid.DataGrid" id="gridNode<?php print $this->idfield ?>" 
+       jsid="grid<?php print $this->idfield ?>" 
+       query="{ <?php print $this->idfield ?>: '*' }" 
+       store="jsonStore<?php print $this->idfield ?>"
+       selectionMode="single"
+       style="width: 100%; height: 200px">
+<thead>
+<tr>
+    <?php
+    $x = 0;
+    foreach($this->columns as $name => $label ) {
+        if ($x == 0 ) {
+            $size = 50;
+            $x++;
+        } else {
+            $size = 100;
+        }
+    ?>
+    <th field="<?php print $name ?>" width="<?= $size ?>px"><?php print $label ?></th>
+    <?php
+    }
+    ?>
+</tr>
+</thead>
+</table>

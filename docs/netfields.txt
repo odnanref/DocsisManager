@@ -1,0 +1,13 @@
+| nettype     | enum('CM','CPE','MTA') | NO   |     | CPE     |       |
+| netid       | int(11)                | NO   | PRI | 0       |       |
+| cmts_ip     | varchar(16)            | NO   |     |         |       |
+| cmts_vlan   | mediumint(9)           | NO   |     | 0       |       |
+| network     | varchar(20)            | NO   |     |         |       |
+| gateway     | varchar(16)            | NO   |     |         |       |
+| grant_flag  | tinyint(1)             | NO   |     | 1       |       |
+| full_flag   | tinyint(4)             | NO   |     | 0       |       |
+| range_min   | varchar(16)            | NO   |     |         |       |
+| range_max   | varchar(16)            | NO   |     |         |       |
+| config_opt1 | tinyint(4)             | NO   |     | 0       |       |
+| config_opt2 | tinyint(4)             | NO   |     | 0       |       |
+| config_opt3 | tinyint(4)             | NO   |     | 0       |       |

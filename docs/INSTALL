@@ -1,0 +1,16 @@
+
+Before use 
+1 - ./cache/bd directory must be created.
+2 - ./gen/ also must be created 
+and should be given permissions for the httpd user to use ./gen and this 
+does not need public access
+3 - ./gen is where the CM files get generated so it should be the tftp dir
+
+=================
+Dependencies
+=================
+php snmp
+php mysql
+Zend Framework 2.x
+Zend_Dojo
+dojo 1.6.1

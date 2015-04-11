@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+$tSource    = '';
+$texp       = '';
+
+if ($this->estado === null || $this->estado == 'activos') {
+    $tmp = '';
+} else {
+    $tmp = '?estado=inactivos';
+}
+
+$obj = new ReflectionObject($this);
+
+if ( $obj->hasProperty("resultado") && !empty($this->resultado)) {
+    $texp = "var jsonData = " . $this->resultado . ";";
+    $tSource = "data: jsonData";
+
+} else {
+    $tSource = "url: '/docsismodem/getajax$tmp'";
+}
+?>
+
+<script type="text/Javascript">
+    <?php if (!empty($texp)) print $texp; ?>
+
+    function escolher(event)
+    {
+    	selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+    	//Not sure if this is the most efficient way but it worked for me
+    	selected_id = grid.store.getValue(selected_item, "macaddr");
+    	location.href = "/docsismodem/ver/id/"+selected_id;
+    }
+
+    var gotItems = function(items, request)
+    {
+        console.log("Number of items located: " + items.length);
+        dojo.byId("the_total_box").innerHTML = "Total: " + items.length;
+    };
+
+    var jsonStore = new dojo.data.ItemFileReadStore({
+        <?= $tSource ?>,
+        id: 'jsonStore'
+    });
+
+    jsonStore.fetch({onComplete: gotItems});
+</script>
+
+<a href="javascript: searchCM();">Procurar</a>
+<div id="docsisform" style="width: 50%;">
+<?php
+    print $this->procura;
+?>
+
+    <span style="float: right;">
+        <a href="javascript:hidesearchCM();">Esconder formul&aacute;rio</a>
+    </span>
+    <br/>
+</div>
+
+<table dojoType="dojox.grid.EnhancedGrid" id="gridNode" jsid="grid"
+       query="{ macaddr: '*' }" store="jsonStore"
+       selectionMode="single" autoWidth="true"
+       style="width: 100%; height: 400px" onRowDblClick='escolher();'
+       plugins="{
+        exporter: true
+        }"
+>
+<thead>
+<tr>
+    <th field="macaddr" width="100">Mac Address</th>
+    <th field="first_online" width="140">1ª vez Online</th>
+    <th field="last_online" width="140">Last Online</th>
+    <th field="reg_count">Register count</th>
+    <th field="serialnum" width="140px">Serial Number</th>
+    <th field="lastip" width="100">&Uacute;lt. IP</th>
+    <th field="config_file" width="260">Config File</th>
+    <th field="node">Celula</th>
+    <th field="subnum">subnum</th>
+    <th field="estado">Estado</th>
+</tr>
+</thead>
+</table>
+<span id="the_total_box">&nbsp;</span>&nbsp;
+<button data-dojo-type="dijit.form.Button" type="button">CSV
+    <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+        grid.exportGrid("csv", {writerArgs: {separator:";"}}, function(str) {
+            // do something interesting with str
+
+            var form = document.createElement('form');
+            dojo.attr(form, 'method', 'POST');
+            document.body.appendChild(form);
+
+            dojo.io.iframe.send({
+                    url: "/docsismodem/exporttocsv/",
+                    form: form,
+                    method: "POST",
+                    content: {exp: str},
+                    timeout: 1500
+            });
+            document.body.removeChild(form);
+        });
+    </script>
+</button>
+
+<script type="text/javascript">
+
+    hidesearchCM();
+
+    function searchCM()
+    {
+        dojo.style('docsisform', { 'display' : 'block' });
+    }
+
+    function hidesearchCM()
+    {
+        dojo.style('docsisform', { 'display' : 'none' });
+    }
+
+</script>

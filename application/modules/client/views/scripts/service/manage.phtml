@@ -1,0 +1,128 @@
+<div id="gridDiv"  style="width: 100%; height: 100%;"></div>
+
+<script type="text/Javascript">
+    function escolher(event)
+    {
+        var grid = dijit.byId("mygrid");
+    	selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+    	//Not sure if this is the most efficient way but it worked for me
+    	selected_id = grid.store.getValue(selected_item, "idservice");
+    	location.href = "/client/service/v/idservice/" + selected_id;
+    }
+
+ // this function is used to store the edited datagrid store and sent data to sever in json format
+    var fillStore = function()
+    {
+    	dijit.byId('gridNode').store._saveEverything = 
+            function( saveCompleteCallback, saveFailedCallback, newFileContentString)
+    	{
+    		console.log(newFileContentString);
+    		dojo.xhrPost({
+    		url: "/client/service/save/idclient/<?= $this->idclient ?>",
+                handleAs: "text",
+    		postData: dojo.toJson(newFileContentString),
+    		error: saveFailedCallback,
+                    load: function(response, ioArgs)
+                    {
+                        alert("Completo " + response) ;
+                        //dijit.byId('gridNode').store.save();
+                    }
+                });
+    	}
+    }
+
+    function saveCompleteCallback()
+    {
+        alert("DONE");
+    }
+    
+    function adicionarrow()
+    {
+        // set the properties for the new item:
+        var myNewItem = {
+            netid: "0",
+            network: "Rede",
+            gateway: "Router de saida da rede",
+            grant_flag: "1",
+            full_flag: "0",
+            range_min: "",
+            range_max: "",
+            cmts_ip: "",
+            cmts_vlan: "1",
+            config_opt1: "",
+            config_opt2: "",
+            config_opt3: ""
+        };
+
+        dijit.byId('gridNode').store.newItem(myNewItem);
+        
+    }
+    
+    function apagarrow()
+    {
+        selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+        dijit.byId('gridNode').store.deleteItem(selected_item);
+    }
+    
+    
+    dojo.ready(function(){
+    /*set up data store*/
+    var data = {
+      url: "/client/service/getservices/idclient/<?= $this->idclient ?>"
+    };
+    
+    var store = new dojo.data.ItemFileWriteStore(data);
+
+    /*set up layout*/
+    var layout = [
+        {
+        defaultCell: { width: 8,
+                type: dojox.grid.cells._Widget, styles: 'text-align: right;'}
+        ,rows: [
+          {'name': 'ID', 'field': 'idservice', 'width': '100px', editable: false},
+          {'name': 'Serviço', 'field': 'service_description', 'width': '100px', 'editable':false},
+          {'name': 'Equipamentos', 'field': 'serialnum', 'width': '200px'},
+          {'name': 'Data Anulado', 'field': 'dataout', 'width': '150px'
+              /*,
+                formatter: formatDate,/*Custom format, change the format in store.
+                editable: true        /*Editable cell
+                ,type: dojox.grid.cells.DateTextBox/*Use DateTextBox in editing mode*/
+                ,getValue: getDateValue    /*Translate the value of DateTextBox to something the store can understand.*/
+                ,constraint: {datePattern: displayPattern}/*Format the date value shown in DateTextBox
+                */
+            }
+        ]
+        }
+    ];
+
+    // create a new grid:
+    var grid = new dojox.grid.DataGrid({
+        id: "mygrid",
+        query: {
+            idservice: '*'
+        },
+        store: store,
+        clientSort: true,
+        rowSelector: '20px',
+        structure: layout
+    },
+    dojo.byId("gridDiv"));
+    
+    /*append the new grid to the div*/
+//    dojo.byId("gridDiv").appendChild(grid.domNode);
+
+    /*Call startup() to render the grid*/
+    grid.startup();
+    
+    dojo.connect(grid, "onRowDblClick", 'escolher');
+    
+    });
+</script>
+
+<button data-dojo-type="dijit.form.Button" type="button">Novo
+    <script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
+        location.href = "/client/service/add/idclient/<?php print $this->idclient; ?>";
+    </script>
+</button>

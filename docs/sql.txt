@@ -1,0 +1,169 @@
+#
+# sql.txt
+#
+# (c) 2011 Fernando Ribeiro < netriver @ gmail .com  >
+# GPL v2 (please view online the license for this project )
+#
+#
+#
+# SQL code to change the basic info of docsismodem system into the 
+# docsismanager
+#
+#
+
+create table IF NOT EXISTS brand (
+idbrand int auto_increment
+,name varchar(254)
+,code varchar(16)
+,default_file varchar(254)
+,default_file_phone_on varchar(254)
+,default_file_mta varchar(254)
+,onefilemta boolean
+,primary key(idbrand)
+);
+
+create table IF NOT EXISTS model (
+idmodel int auto_increment
+,idbrand int
+,description varchar(254)
+,vendormac varchar(6)
+,default_file varchar(254)
+,default_file_phone_on varchar(254)
+,default_file_mta varchar(254)
+,onefilemta boolean
+,primary key(idmodel)
+,foreign key (idbrand) references brand(idbrand)
+);
+
+
+ALTER TABLE docsismodem add idmodel int unsigned;
+
+ALTER TABLE docsismodem add tel1 varchar(14);
+ALTER TABLE docsismodem add tel2 varchar(14);
+ALTER TABLE docsismodem add macaddr_mta varchar(254);
+ALTER TABLE docsismodem add config_file_mta varchar(254);
+ALTER TABLE docsismodem DROP id_servico;
+ALTER TABLE docsismodem DROP id_aparelho;
+
+create table IF NOT EXISTS typeservice(
+idtypeservice int auto_increment,
+name varchar(200) not null,
+description varchar(254),
+type enum ('tv', 'net', 'tel'),
+primary key(idtypeservice)
+);
+
+INSERT INTO typeservice (name, description, type) values 
+('televisao', 'Servico de TV', 'tv'),
+('Internet', 'Internet', 'net'),
+('Telefone', 'Telefone', 'tel');
+
+CREATE TABLE IF NOT EXISTS pack (
+idpack int auto_increment,
+idtypeservice int,
+name varchar(254) not null,
+description varchar(254),
+dataactive timestamp,
+dataunactive timestamp,
+downloadspeed varchar(40),
+uploadspeed varchar(40),
+prebuilt_file varchar(254),
+prebuilt_file_mta varchar(254),
+primary key(idpack)
+);
+
+INSERT INTO pack (idtypeservice, name, description, dataactive) VALUES 
+(1, 'Basico', 'TV base', NOW()),
+(1, 'Basico', 'TV Top', NOW()),
+(2, 'Basico NET', 'Velocidade baixa', NOW()),
+(2, 'Medio NET', 'Velocidade Media', NOW()),
+(2, 'Topo NET', 'Velocidade maxima', NOW()),
+(2, 'Empresarial NET', 'Para empresas', NOW()),
+(3, 'Telefone Base', 'Telefone', NOW() ),
+(3, 'Telefone Extra', 'Telefone Extra', NOW() )
+;
+
+CREATE TABLE IF NOT EXISTS service (
+idservice int auto_increment,
+idequipment int not null,
+idpack int not null,
+datain	timestamp DEFAULT CURRENT_TIMESTAMP,
+dataactive timestamp,
+dataunactive timestamp,
+tel bigint,
+linenumber int,
+node varchar(254),
+primary key(idservice)
+);
+
+CREATE TABLE IF NOT EXISTS client ( 
+idclient int auto_increment,
+name varchar(254) not null,
+contract varchar(40) not null,
+node varchar(20) not null,
+mobile int,
+phone int,
+email varchar(254),
+state enum('active', 'unactive', 'cut'),
+datain timestamp,
+primary key(idclient)
+);
+
+CREATE TABLE IF NOT EXISTS  typeequipment (
+idtypeequipment int auto_increment,
+code varchar(6) not null,
+name varchar(50) not null,
+primary key(idtypeequipment)
+);
+
+CREATE TABLE IF NOT EXISTS equipment (
+idequipment int auto_increment,
+idclient   int,
+idtypeequipment int,
+name varchar(100),
+datain timestamp,
+datachanged timestamp ,
+dataout timestamp,
+serialnum varchar(200),
+macaddr varchar(200),
+idmodel int,
+primary key(idequipment)
+,foreign key (idtypeequipment) references typeequipment(idtypeequipment)
+,foreign key (idclient) references client(idclient)
+);
+
+INSERT INTO typeequipment (code, name) VALUES 
+('NONE', 'N/A'),
+('MODEM', 'Modem'),
+('TELEF', 'Telefone fixo')
+;
+
+alter table brand add default_file_mta_2l varchar(254);
+alter table model add default_file_mta_2l varchar(254);
+
+CREATE TABLE IF NOT EXISTS dmhistory (
+iddmhistory int auto_increment,
+macaddr varchar(16),
+serialnum varchar(254),
+ipaddr varchar(254),
+config_file varchar(254),
+cmts_vlan varchar(254),
+subnum int,
+estado varchar(100),
+datamudado timestamp,
+lastip varchar(254),
+tel1 varchar(40),
+tel2 varchar(40),
+macaddr_mta varchar(16),
+config_file_mta varchar(254),
+idmodel int,
+user varchar(254),
+action varchar(40),
+primary key(iddmhistory)
+);
+
+INSERT INTO `brand` VALUES (1,'Thomson','THOMSON','DEFAULT.cfg','DEFAULT_THOMSON_MTA.cfg',1,NULL,'DEFAULT_THOMSON_MTA_2L.cfg'),(2,'Netgear','NETGEAR',NULL,NULL,NULL,NULL,NULL),(3,'MISSING_INFO',NULL,NULL,NULL,NULL,NULL,NULL),(4,'Hitron Technologies','HITRON','DEFAULT_HITRON.cfg','',0,'',NULL),(5,'Motorola Corporation','MOTOROLA',NULL,NULL,NULL,NULL,NULL),(6,'Arris Interactive, L.L.C.','ARRIS','DEFAULT_ARRIS_phone_on.cfg','DEFAULT_ARRIS_mta.cfg',0,NULL,'DEFAULT_ARRIS_mta_2L.cfg'),(7,'TERAYON',NULL,NULL,NULL,NULL,NULL,NULL),(8,'Askey',NULL,NULL,NULL,NULL,NULL,NULL);
+
+INSERT INTO `model` VALUES (1,1,'THG540',NULL,NULL,NULL,NULL,NULL,NULL),(2,2,'CBVG834G',NULL,NULL,NULL,NULL,NULL,NULL),(3,2,'CVG834G',NULL,NULL,NULL,NULL,NULL,NULL),(4,3,'MISSING_INFO',NULL,NULL,NULL,NULL,NULL,NULL),(5,4,'BVW-3653',NULL,NULL,NULL,NULL,NULL,NULL),(6,5,'SB5101',NULL,NULL,NULL,NULL,NULL,NULL),(7,1,'THG520',NULL,NULL,NULL,NULL,NULL,NULL),(8,6,'TM502A',NULL,NULL,NULL,NULL,NULL,NULL),(9,5,'SB5100',NULL,NULL,NULL,NULL,NULL,NULL),(10,1,'TCM420',NULL,NULL,NULL,NULL,NULL,NULL),(11,1,'TCM425',NULL,NULL,NULL,NULL,NULL,NULL),(12,6,'TM601B',NULL,NULL,NULL,NULL,NULL,NULL),(13,1,'TCM325',NULL,NULL,NULL,NULL,NULL,NULL),(14,7,'TA-102-A-HP',NULL,NULL,NULL,NULL,NULL,NULL),(15,8,'CME075',NULL,NULL,NULL,NULL,NULL,NULL),(16,6,'TM601A',NULL,NULL,NULL,NULL,NULL,NULL),(18,6,'WTM652A',NULL,NULL,NULL,NULL,NULL,NULL),(19,6,'WTM652B',NULL,NULL,NULL,NULL,NULL,NULL),(20,6,'TM602A',NULL,NULL,NULL,NULL,NULL,NULL);
+
+ALTER TABLE docsismodem add node varchar(14);

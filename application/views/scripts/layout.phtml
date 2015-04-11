@@ -1,0 +1,102 @@
+<?php
+
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+echo $this->doctype();
+
+?>
+<html>
+    <head>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<?php
+echo $this->headTitle("Docsis Manager");
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
+echo $this->headMeta();
+$this->headLink()->setStylesheet("http://".$_SERVER['SERVER_NAME'].'/css/one.css');
+
+echo $this->headLink();
+echo $this->headStyle();
+
+        //if ($this->dojo()->isEnabled())
+        {
+            Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+            $this->dojo()->setLocalPath("http://".$_SERVER['SERVER_NAME'].'/js/dojo/dojo/dojo.js');
+            $this->dojo()->addStyleSheetModule('dijit.themes.claro')
+                    ->addStylesheet("http://".$_SERVER['SERVER_NAME']."/js/dojo/dojox/grid/resources/claroGrid.css")
+                    ->requireModule("dojo.io.iframe")
+                    ->requireModule("dojo.data.ItemFileReadStore")
+                    ->requireModule("dojox.grid.enhanced.plugins.exporter.CSVWriter")
+                    ->requireModule("dojox.grid.DataGrid")
+                    ->requireModule("dojox.grid.EnhancedGrid")
+                    ->requireModule("dijit.MenuBar")
+                    ->requireModule("dijit.MenuBarItem")
+                    ->requireModule("dijit.PopupMenuBarItem")
+                    ->requireModule("dijit.Menu")
+                    ->requireModule("dijit.MenuItem")
+                    ->requireModule("dijit.PopupMenuItem")
+                    ->requireModule("dijit.Calendar")
+                    ->requireModule("dijit.form.TimeTextBox")
+                    ->requireModule("dijit.form.Form")
+                    ->requireModule("dijit.form.Button")
+                    ->requireModule("dijit.form.Select")
+                    ->requireModule("dijit.form.ValidationTextBox")
+                    ->requireModule("dijit.form.DateTextBox")
+                    ->requireModule("dojo.data.ItemFileWriteStore")
+                    ;
+            print "<script type=\"text/javascript\"> var djConfig= { parseOnLoad: false, gfxRenderer: \"svg,silverlight,vml\"};</script>";
+
+            print $this->dojo();
+        }
+
+echo $this->headScript()->appendFile('/js/global.js');
+
+?>
+<style type="text/css">@import "/css/datepick/redmond.datepick.css";</style>
+<script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="/js/datepick/jquery.datepick.js"></script>
+<script type="text/javascript" src="/js/datepick/jquery.datepick-pt-BR.js"></script>
+</head>
+	<body class="claro">
+<?php
+            if (Users_Plugin_Auth::getInstance()->hasIdentity()) {
+            ?>
+            <div id="wrapper" > </div>
+            <?php
+            }
+            ?>
+        <br/>
+<?php
+
+    print $this->flashMessages();
+
+    print $this->layout()->content;
+
+    print $this->inlineScript();
+
+?>
+    </body>
+</html>

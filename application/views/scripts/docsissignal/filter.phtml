@@ -1,0 +1,194 @@
+<?php
+
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+?>
+<form method="post" action="/docsissignal/filter">
+    <table id="table-design" style=" width: 50%;" align="center">
+        <tr>
+            <td width="100px">
+                <label for="tx1">TX</label>
+            </td>
+            <td>
+                Entre
+                <select name="filterd[tx1][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[tx1][value]" id="tx1" />
+
+                <label> e </label>
+
+                <select name="filterd[tx2][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[tx2][value]" id="tx2" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="snr1">SNR</label>
+            </td>
+            <td>
+                Entre
+                <select name="filterd[snr1][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[snr1][value]" id="snr1" />
+
+                <label> e </label>
+
+                <select name="filterd[snr2][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[snr2][value]" id="snr2" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="rx1">RX</label>
+            </td>
+            <td>
+                Entre
+                <select name="filterd[rx1][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[rx1][value]" id="rx1" />
+
+                <label> e </label>
+
+                <select name="filterd[rx2][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[rx2][value]" id="rx2" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="mr1">Micro-Reflections</label>
+            </td>
+            <td>
+                Entre
+                <select name="filterd[mr1][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[mr1][value]" id="mr1" />
+
+                <label> e </label>
+
+                <select name="filterd[mr2][mark]">
+                    <option value="=">&equals;</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
+                    <option value="<"><</option>
+                    <option value=">">></option>
+                </select>
+                <input type="text" value="" maxlength="4" size="6" name="filterd[mr2][value]" id="mr2" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="macaddr">Mac Address</label>
+            </td>
+            <td>
+                <input type="text" value="" maxlength="12" size="16" name="filterd[macaddr]" id="macaddr" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="macaddr">IP Address</label>
+            </td>
+            <td>
+                <input type="text" value="" maxlength="16" size="16" name="filterd[ipaddr]" id="ipaddr" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="node">Célula</label>
+            </td>
+            <td>
+                <input type="text" value="" maxlength="16" size="16" name="filterd[node]" id="node" />
+            </td>
+        </tr>
+
+        <tr style="margin-top: 20px;">
+            <td>
+                Intervalo de tempo
+            </td>
+            <td>
+                <input type="text" name="filterd[data1]" id="d1"/>
+                e
+                <input type="text" name="filterd[data2]" id="d2"/>
+                <script type="text/Javascript">
+                    $('#d1').datepick({
+                    showTrigger: '<button type="button" class="trigger"><img src="/css/datepick/calendar.gif" alt="Popup"></button>'
+                    ,dateFormat: 'yyyy-mm-dd'});
+                    $('#d2').datepick({
+                    showTrigger: '<button type="button" class="trigger"><img src="/css/datepick/calendar.gif" alt="Popup"></button>'
+                    ,dateFormat: 'yyyy-mm-dd'});
+
+                </script>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" align="right">
+                <input type="submit" class="buttons" value="Procurar" />
+            </td>
+        </tr>
+    </table>
+</form>

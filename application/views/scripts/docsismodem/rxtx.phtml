@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and 
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ * 
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ * 
+ */
+?>
+<div id="gridRXTX"></div>
+
+<script type="text/Javascript">
+    
+    var storeRXTX = new dojo.data.ItemFileReadStore(
+        {
+            data: <?php print ( !empty($this->resultado) ? $this->resultado : "[]" ); ?>,
+            id: "storerxtx"
+        }
+    );
+    
+    var layoutRXTX = [
+            {
+                field:  'idtx',
+                name:   '#ID',
+                width:  '40px'
+            },
+            {
+                field:  'data',
+                name:   'Data',
+                width:  '140px'
+            },
+            {
+                field:  'tx',
+                name:   'TX',
+                formatter: validarTX
+            },
+            {
+                field:  'snr',
+                name:   'SNR',
+                formatter: validarSNR
+            },
+            {
+                field:  'rx',
+                name:   'RX',
+                formatter: validarRX
+            },
+            {
+                field:  'microreflections',
+                name:   'Microreflections'
+            },
+            {
+                field: 'dschannelid',
+                name: 'Downstream ID'
+            },
+            {
+                field: 'uschannelid',
+                name: 'Upstream ID'
+            }
+        ];
+    
+    // create a new grid:
+    var grid = new dojox.grid.DataGrid({
+        query: {
+            idtx: '*'
+        },
+        store: storeRXTX,
+        rowSelector: '20px',
+        structure:   layoutRXTX
+    },
+    dojo.byId("gridRXTX"));
+        
+    // append the new grid to the div "gridContainer4":
+    //dojo.byId("gridRXTX").appendChild(grid.domNode);
+
+    // Call startup, in order to render the grid:
+    grid.startup();
+    
+</script>

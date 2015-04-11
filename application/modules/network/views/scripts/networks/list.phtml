@@ -1,0 +1,117 @@
+<script type="text/Javascript">
+    function escolher(event)
+    {
+    	selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+    	//Not sure if this is the most efficient way but it worked for me
+    	selected_id = grid.store.getValue(selected_item, "netid");
+    	location.href = "/network/networks/view/?netid="+selected_id;
+    }
+
+ // this function is used to store the edited datagrid store and sent data to sever in json format
+    var fillStore = function()
+    {
+    	dijit.byId('gridNode').store._saveEverything = function( saveCompleteCallback, saveFailedCallback, newFileContentString)
+    	{
+    		console.log(newFileContentString);
+    		dojo.xhrPost({
+    		url: "/network/networks/save/",
+                handleAs: "text",
+    		postData: dojo.toJson(newFileContentString),
+    		error: saveFailedCallback,
+                    load: function(response, ioArgs)
+                    {
+                        alert("Completo " + response) ;
+                        //dijit.byId('gridNode').store.save();
+                    }
+                });
+    	}
+    }
+
+    function saveFailedCallback()
+    {
+        alert("FAIL");
+    }
+
+    function saveCompleteCallback()
+    {
+        alert("DONE");
+    }
+    
+    function adicionarrow()
+    {
+        // set the properties for the new item:
+        var myNewItem = {
+            netid: "0",
+            network: "Rede",
+            gateway: "Router de saida da rede",
+            grant_flag: "1",
+            full_flag: "0",
+            range_min: "",
+            range_max: "",
+            cmts_ip: "",
+            cmts_vlan: "1",
+            config_opt1: "",
+            config_opt2: "",
+            config_opt3: ""
+        };
+
+        dijit.byId('gridNode').store.newItem(myNewItem);
+        
+    }
+    
+    function apagarrow()
+    {
+        selected_index = grid.focus.rowIndex;
+    	selected_item = grid.getItem(selected_index);
+        dijit.byId('gridNode').store.deleteItem(selected_item);
+    }
+    
+</script>
+
+<div dojoType="dojo.data.ItemFileWriteStore" jsId="jsonStore" url="/network/networks/getajax" id="store" />
+<table dojoType="dojox.grid.DataGrid" id="gridNode" jsid="grid" query="{ netid: '*' }" store="jsonStore"
+       selectionMode="single" autoWidth="true"
+       style="width: 100%; height: 200px">
+<thead>
+<!--<colgroup span="2" noscroll="true"></colgroup>-->
+<!--<colgroup span="10"></colgroup>-->
+<tr>
+    <th field="netid">netid</th>
+    <th field="network" width="150px"
+    editable="true" alwaysEditing="true"
+    >Rede</th>
+    <th field="gateway" width="100px"
+    editable="true" alwaysEditing="true"
+    >Gateway da rede</th>
+    <th width="50px" field="grant_flag"
+            editable="true" alwaysEditing="true"
+ 			cellType="dojox.grid.cells.Bool" values="1,0" 
+            >
+	Activa</th>
+    <th field="full_flag" width="50px"
+    		editable="true" alwaysEditing="true"
+ 			cellType="dojox.grid.cells.Bool" values="1,0" 
+    >Atingiu limite</th>
+    <th field="range_min" width="150px"
+    editable="true" alwaysEditing="true"
+    >Rede inicia em</th>
+    <th field="range_max" width="150px"
+    editable="true" alwaysEditing="true">termina em</th>
+    <th field="cmts_ip"
+    editable="true" alwaysEditing="true">IP do CMTS</th>
+    <th field="cmts_vlan">Vlan [opcional]</th>
+    <th field="config_opt1">Opt 1</th>
+    <th field="config_opt2">Opt 2</th>
+    <th field="config_opt3">Opt 3</th>
+</tr>
+</thead>
+</table>
+<button dojoType="dijit.form.Button" onclick="dijit.byId('gridNode').store.revert();">Anular antes de salvar</button>  
+<button dojoType="dijit.form.Button" onclick="dijit.byId('gridNode').store.save();">Salvar</button>
+<button dojoType="dijit.form.Button" onclick="adicionarrow();">Adicionar</button>  
+<button dojoType="dijit.form.Button" onclick="apagarrow();">Apagar registo</button>
+<script language="Javascript" type="text/Javascript">
+dojo.addOnLoad(fillStore);
+</script>
+<script type="dojo/connect" event="onBlur"> var cells = dojo.query('#'+this.id+' .dojoxGridCell'); this.doclick(cells[0]); </script>

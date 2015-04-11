@@ -1,0 +1,133 @@
+<?php
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+?>
+<form action="/network/lease/search/" method="post">
+    <label>IP</label>
+    <input type="text" name="ip" value="" id="lease-ip"/>
+    <input type="text" name="date" value="" id="d1"/>
+    <input type="button" name="search" value="Procurar" onClick="fetchLeaseResults();" />
+</form>
+
+<br/>
+
+<div id="gridL"></div>
+
+<script type="text/Javascript">
+
+$('#d1').datepick({
+    showTrigger: '<button type="button" class="trigger"><img src="/css/datepick/calendar.gif" alt="Popup"></button>'
+    ,dateFormat: 'yyyy-mm-dd'});
+
+function fetchLeaseResults()
+{
+    ip = dojo.byId("lease-ip");
+    date = dojo.byId("d1");
+
+    if (ip.value.toString() == "" || date.value.toString() == "") {
+        dojo.require("dijit.Dialog");
+        secondDlg = new dijit.Dialog({
+            title: "Valores em falta",
+            style: "width: 300px"
+        });
+
+        secondDlg.attr("content", "Valor IP ou valor de data em falta.");
+        secondDlg.show();
+        console.log("FAIL ON IP");
+        return false;
+    }
+
+    var tmp = "/network/lease/searchresult/id/" + ip.value + "/date/" + date.value;
+
+    if (dijit.byId("gridL")) {
+        var storeL = new dojo.data.ItemFileReadStore(
+            {
+                url: tmp.toString(),
+                id: "storerL"
+            }
+        );
+        dijit.byId("gridL").setStore(storeL);
+        return true;
+    } else {
+        var storeL = new dojo.data.ItemFileReadStore(
+        {
+            url: tmp.toString(),
+            id: "storerL"
+        }
+        );
+    }
+
+    var layoutL = [
+            {
+                field:  'idlease',
+                name:   '#ID',
+                width:  '40px'
+            },
+            {
+                field: 'ordem',
+                name: 'order',
+                width: '45px'
+            },
+            {
+              field: 'ip',
+              name: 'IP',
+              width: '100px'
+            },
+            {
+                field: 'macaddr',
+                name: 'Mac',
+                width: '126px'
+            },
+            {
+                field: 'remoteid',
+                name: 'Remote-Id',
+                width: '126px'
+            },
+            {
+                field:  'data',
+                name:   'Data',
+                width:  '150px'
+            }
+        ];
+
+    // create a new grid:
+    var grid = new dojox.grid.DataGrid({
+        query: {
+            idlease: '*'
+        },
+        store: storeL,
+        rowSelector: '20px',
+        structure:   layoutL
+    },
+    dojo.byId("gridL"));
+
+    // append the new grid to the div "gridContainer4":
+    //dojo.byId("gridRXTX").appendChild(grid.domNode);
+
+    // Call startup, in order to render the grid:
+    grid.startup();
+}
+
+</script>

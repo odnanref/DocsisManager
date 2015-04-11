@@ -1,0 +1,104 @@
+<div id="remotecmscreen">
+<input name="rq-id" id="rq-id" value="<?php print $this->id ?>" type="hidden"/>
+    <table>
+        <tr>
+            <td>
+                Freq. Downstream
+            </td>
+            <td>
+                <input name="rq-downstreamfreq" id="rq-downstreamfreq" value="" type="text"/>
+            </td>
+
+            <td>
+                Freq. Upstream
+            </td>
+            <td>
+                <input name="rq-upstreamfreq" id="rq-upstreamfreq" value="" type="text"/>
+            </td>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td>TX</td>
+            <td>
+                <input name="rq-tx" id="rq-tx" value="" type="text"/>
+            </td>
+            <td>SNR</td>
+            <td>
+                <input name="rq-snr" id="rq-snr" value="" type="text"/>
+            </td>
+        </tr>
+        <tr>
+            <td>RX</td>
+            <td>
+                <input name="rq-rx" id="rq-rx" value="" type="text"/>
+            </td>
+            <td>Micro Reflections</td>
+            <td>
+                <input name="rq-microreflections" id="rq-microreflections" value="" type="text"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Boot File</td>
+            <td>
+                <input name="rq-imagefile" id="rq-imagefile" value="" type="text"/>
+            </td>
+            <td>
+                HW Rev
+            </td>
+            <td>
+                <input name="rq-hw_rev" id="rq-hw_rev" value="" type="text"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Boot Revision
+            </td>
+            <td>
+                <input name="rq-bootr" id="rq-bootr" value="" type="text"/>
+            </td>
+            <td>
+                SW Revision
+            </td>
+            <td>
+                <input name="rq-sw_rev" id="rq-sw_rev" value="" type="text"/>
+            </td>
+            <td colspan="1">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <textarea rows="20" cols="80" id="rq-log"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Vendor</td>
+            <td>
+                <input name="rq-vendor" id="rq-vendor" value="" type="text"/>
+            </td>
+            <td>Model</td>
+            <td>
+                <input name="rq-model" id="rq-model" value="" type="text"/>
+            </td>
+            <td colspan="3">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>M. Info</td>
+            <td colspan="7">
+                <input name="rq-version" id="rq-version" value="" type="text"
+                       size="50"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Uptime (ligado à x dias/horas)</td>
+            <td colspan="7">
+                    <input name="rq-uptime" id="rq-uptime" value="" type="text"
+                       size="50"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<input type="button" name="consultar" value="Ler remoto"
+                       onClick="remotequery();"/>
+<input type="button" name="cmreset" value="CM Reset"
+                       onClick="remotereset();"/>

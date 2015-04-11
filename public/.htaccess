@@ -1,0 +1,12 @@
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteBase /
+RewriteRule !\.(js|ico|txt|gif|jpg|png|css)$ index.php
+#RewriteRule !\.(js|ico|txt|gif|jpg|png|css)$ fcgi://127.0.0.1:9000/home/andref/workspace/docsismanager/public/index.php
+
+#php_value auto_prepend_file /var/www/xhprof/header.php
+#php_value auto_append_file /var/www/xhprof/footer.php

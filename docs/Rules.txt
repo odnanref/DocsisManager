@@ -1,0 +1,5 @@
+
+* dojo.dijit.select in DM_Form_Client global.js isCM(idCode)
+    - apenas pode "criar" o modelo + marca caso o equipamento não tenha associado
+qualquer modelo ou marca.
+

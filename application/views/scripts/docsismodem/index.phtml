@@ -1,0 +1,290 @@
+<?php
+
+/**
+ * This file belongs to the Docsis Manager for managing ISC dhcp and
+ * docsis server table (docsismodem) for a cable network it provides some
+ * utilization and information gathering tools for easy management of the cable
+ * modem network and provision of CPE and other ISP related equipments.
+ *
+ * Copyright (C) 2011  Fernando André <netriver at gmail dot com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+
+?>
+<br/>
+
+<div style="float: left;">
+    <table id="table-design">
+        <th colspan="2">Modems por c&eacute;lula activos<br/></th>
+    <?php
+        $xCell=0;
+        foreach ($this->perCellCount as $cell ) {
+            $cell = (object) $cell;
+            if ($xCell==0) {
+                print "<tr>";
+            }
+            $xCell++;
+            print "<td> <a href='/docsismodem/view/cell/" . urlencode($cell->node) . "'>" .
+                $cell->node . "</a></td>";
+            print "<td class='goright'>" . $cell->t . "</td>";
+            if ($xCell == 2 ){
+                print "</tr>";
+                $xCell=0;
+            }
+        }
+    ?>
+    </table>
+</div>
+
+<div style="float: left; margin-right: 1px;">
+    <table id="table-design">
+        <th colspan="2">Estado dos modems</th>
+        <tr>
+            <td>
+                <a href="/docsismodem/list/">Activos</a>
+            </td>
+            <td class=" goright">
+                <?php print $this->totalCmsActive;?>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="/docsismodem/inactivos/">Anulados</a></td>
+            <td class="goright"><?php print $this->totalCmsUnactive;?></td>
+        </tr>
+        <tr>
+            <td>Cortados</td>
+            <td class="goright"><?php print $this->totalCmsCut;?></td>
+        </tr>
+        <tr>
+            <td>Total voip (Activo / Inactivo )</td>
+            <td class="goright"><?php print $this->totalvoipActivo;?> / <?php print $this->totalvoipOff;?></td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td class="goright"><?php print $this->totalCms;?></td>
+        </tr>
+    </table>
+</div>
+
+<div style="float: left;">
+    <table id="table-design">
+        <th colspan="2">Total de modems por ficheiro<br/>
+            com mais de um modem em uso.</th>
+    <?php
+        foreach ($this->files as $file ) {
+            $file = (object) $file;
+            print "<tr>";
+            print "<td><a href='/docsismodem/view/config_file/" .
+                    urlencode($file->config_file) . "'>" .
+                    $file->config_file . "</a></td>";
+            print "<td class='goright'>" . $file->t . "</td>";
+            print "</tr>";
+        }
+    ?>
+    </table>
+</div>
+
+<div style="float: left;">
+    <table id="table-design">
+        <th colspan="2">Modems com mais registos</th>
+    <?php
+        foreach ($this->moreRegs as $file ) {
+            $file = (object) $file;
+            print "<tr>";
+            print "<td><a href='/docsismodem/ver/id/" .$file->macaddr . "'> " .
+                    $file->macaddr .
+                    "</a></td>";
+            print "<td class='goright'>" . $file->reg_count . "</td>";
+            print "</tr>";
+        }
+    ?>
+    </table>
+</div>
+
+<div style="float: left;">
+    <table id="table-design">
+        <th colspan="2">Modelos de modems activos<br/></th>
+    <?php
+        foreach ($this->cmmodels as $file ) {
+            $file = (object) $file;
+            print "<tr>";
+            print "<td> <a href='/docsismodem/view/idmodel/{$file->idmodel}'>" .
+                    $file->brand . ", " . $file->description . "</a></td>";
+            print "<td class='goright'>" . $file->t . "</td>";
+            print "</tr>";
+        }
+    ?>
+    </table>
+</div>
+
+
+<div style="float: left; background-color: #E0E4E7; border: 1px solid black; width:400px;">
+<!-- create the DOM node for the chart -->
+<p style="text-align: center;">Novos CM registrados por mês
+<div id="chartNode" style="width:300px;height:150px; float: none;"></div>
+<div id="legend"></div>
+</p>
+<script type="text/Javascript">
+// Require the basic 2d chart resource: Chart2D
+        dojo.require("dojox.charting.Chart2D");
+        dojo.require("dojox.charting.plot2d.ClusteredColumns");
+dojo.require("dojox.layout.FloatingPane");
+// Require the theme of our choosing
+//"Claro", new in Dojo 1.6, will be used
+dojo.require('dojox.charting.widget.Chart2D');
+dojo.require("dojox.charting.widget.Legend");
+dojo.require("dojox.charting.action2d.Tooltip");
+
+//dojo.require('dojox.charting.plot2d.Columns');
+
+//dojo.require('dojox.charting.themes.PlotKit.blue');
+
+dojo.require("dojox.charting.themes.Claro");
+
+dojo.require('dojox.charting.DataSeries');
+dojo.require('dojox.charting.StoreSeries');
+dojo.require("dojo.colors");
+
+// Define the data
+var chartData = [10000,9200,11811,12000,7662,13887,14200,12222,12000,10009,11288,12099];
+var chartData2 = [100,200,1111,1200,7662,13287,14260,18222,14000,9009,10288,11099];
+
+function trans1(store, item){
+  // let's create our object
+  var o = {
+    x: store.getValue(item, "first_online"),
+    y: store.getValue(item, "t"),
+    tooltip: store.getValue(item, "t")
+    //,color: store.getValue(item, "urgency") ? "red" : "green"
+  };
+
+  // we can massage the object, if we want, and return it
+  return o;
+}
+
+// When the DOM is ready and resources are loaded...
+dojo.ready(function() {
+
+    // Create the chart within it's "holding" node
+    var chartA = new dojox.charting.Chart2D("chartNode");
+
+    // Set the theme
+    chartA.setTheme(dojox.charting.themes.Claro);
+    //chart.setTheme(dojox.charting.themes.PlotKit.blue);
+
+    // Add the only/default plot
+    chartA.addPlot("default", 
+    {
+        //        type: "Lines",
+        //        markers: true
+        type: "ClusteredColumns",
+            markers: true,
+            lines: true,
+            areas: true,
+            gap: 6,
+            minBarSize: 6
+    });
+
+    // Add axes
+    chartA.addAxis("x", {"title" : "Meses", min: 0, max: 13});
+    chartA.addAxis("y", { min: 1, vertical: true, fixLower: "major", fixUpper: "major" });
+
+    // Add the series of data
+    //addSeries("My Month", new dojox.charting.DataSeries(mystore, {query:{}}, "MyMonth")).
+    //
+    var jsonStoreChart1 = new dojo.data.ItemFileReadStore({
+        url: "/docsismodem/getnewbymonths/year/<?= date("Y", strtotime("-1 year")) ?>",
+        id: 'jsonStoreChart1'
+    });
+/*    jsonStoreChart1.fetch({
+        onBegin: function (total) {
+            console.log("There are a "+ total + " items in the store.");
+        }
+    })
+ */
+    var jsonStoreChart2 = new dojo.data.ItemFileReadStore({
+        url: "/docsismodem/getnewbymonths/year/<?= date("Y") ?>",
+        id: 'jsonStoreChart2'
+    });
+
+    var jsonStoreChartCuda = new dojo.data.ItemFileReadStore({
+        url: "/docsismodem/getnewbymonthsnetwork/year/<?= date("Y") ?>/network/10.1",
+        id: 'jsonStoreChartCuda'
+    });
+
+    var jsonStoreChartArris = new dojo.data.ItemFileReadStore({
+        url: "/docsismodem/getnewbymonthsnetwork/year/<?= date("Y") ?>/network/10.2",
+        id: 'jsonStoreChartArris'
+    });
+
+    var jsonStoreChartTera = new dojo.data.ItemFileReadStore({
+        url: "/docsismodem/getnewbymonthsnetwork/year/<?= date("Y") ?>/network/10.3",
+        id: 'jsonStoreChartTera'
+    });
+
+    var jsonStoreChartUbr1 = new dojo.data.ItemFileReadStore({
+        url: "/docsismodem/getnewbymonthsnetwork/year/<?= date("Y") ?>/network/10.4",
+        id: 'jsonStoreChartUbr1'
+    });
+
+
+/*    chartA.addSeries("<?= date("Y", strtotime("-1 year")) ?>",new dojox.charting.DataSeries(jsonStoreChart1, {query: {first_online: '*'}} ,trans1),
+        {
+            fill: "green",
+            stroke: {
+                color: "black",
+                width: 1
+            }
+        });
+ */
+    chartA.addSeries("<?= date("Y") ?>",new dojox.charting.DataSeries(jsonStoreChart2, {query: {first_online: '*'}}, trans1), {
+        fill: "blue",
+            stroke: {
+                color: "black",
+                width: 1
+            }
+    });
+
+//    chartA.addSeries("<?= date("Y") ?> Cuda",new dojox.charting.DataSeries(jsonStoreChartCuda, {query: {first_online: '*'}}, trans1));
+    chartA.addSeries("<?= date("Y") ?> Terayon",new dojox.charting.DataSeries(jsonStoreChartTera, {query: {first_online: '*'}}, trans1),
+        {
+            fill: "red",
+            stroke: {
+                color: "black",
+                width: 1
+            }
+        });
+//    chartA.addSeries("<?= date("Y") ?> Arris",new dojox.charting.DataSeries(jsonStoreChartArris, {query: {first_online: '*'}}, trans1));
+    chartA.addSeries("<?= date("Y") ?> Ubr1",new dojox.charting.DataSeries(jsonStoreChartUbr1, {query: {first_online: '*'}}, trans1),
+    {
+        fill: "grey",
+        stroke: {
+            color: "black",
+            width: 1
+        }
+    });
+
+    // Render the chart!
+    chartA.render();
+
+    new dojox.charting.action2d.Tooltip(chartA);
+
+    var legend = new dojox.charting.widget.Legend({ chart: chartA, horizontal: true, outline: true }, "legend");
+
+});
+</script>
+</div>
