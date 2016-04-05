@@ -1,0 +1,24 @@
+{
+    "name": "odnanref/DocsisManager",
+    "license": "GPL2",
+    "type": "project",
+    "description": "Docsis Manager WebApp software",
+    "autoload": {
+        "psr-0": { "": "library/" }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework1": "1.*",
+		"symfony/event-dispatcher": "*"
+    },
+	"authors":[
+		{
+			"name": "Fernando Andre",
+			"email": "netriver@gmail.com"
+		}
+	],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "stable"
+}
