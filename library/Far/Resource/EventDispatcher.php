@@ -33,20 +33,17 @@
 class Far_Resource_EventDispatcher extends Zend_Application_Resource_ResourceAbstract
 {
     private $_dispatcher = null;
-    
+
     public function init()
     {
         if ($this->_dispatcher === null ) {
-            require APPLICATION_PATH . 
-                '/../library/Symfony/Component/EventDispatcher/EventDispatcher.php';
-        
             $dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
         } else {
             $dispatcher = $this->_dispatcher;
         }
         $this->getBootstrap()->eventDispatcher = $dispatcher;
-        
+
         return $dispatcher;
-        
+
     }
 }
