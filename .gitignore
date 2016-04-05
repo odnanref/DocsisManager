@@ -2,3 +2,5 @@ Zend*
 .svn
 application.ini
 cache/
+composer.lock
+vendor*
