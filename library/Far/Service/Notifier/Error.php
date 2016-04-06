@@ -93,6 +93,10 @@ class Far_Service_Notifier_Error {
 
     public function notify()
     {
+        $writer = new Zend_Log_Writer_Stream(sys_get_temp_dir() . '/docsismanager.log');
+        $log = new Zend_Log($writer);
+        $log->info($this->getFullErrorMessage());
+
         $sent = false;
         if (!in_array($this->_environment, array('production', 'development'))) {
             return false;
@@ -103,10 +107,6 @@ class Far_Service_Notifier_Error {
             $this->_mailer->setBodyText($this->getFullErrorMessage());
             $sent = $this->_mailer->send();
         }
-
-        $writer = new Zend_Log_Writer_Stream(sys_get_temp_dir() . '/docsismanager.log');
-        $log = new Zend_Log($writer);
-        $log->info($this->getFullErrorMessage());
 
         return $sent;
     }
