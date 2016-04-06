@@ -37,4 +37,7 @@ has this is a ZF1 install
 
 - YOU MUST HAVE INSTALLED docsis tool witch can be found in sourceforge
 
+- **Errors** are logged to /tmp/docsismanager.log  /tmp is a example what is used 
+is the return of sys_get_temp_dir() wich is usually /tmp
+
 
