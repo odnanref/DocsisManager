@@ -67,7 +67,7 @@ class Users_Plugin_Identity extends Zend_Controller_Plugin_Abstract
                 $redirect = false;
             }
         }
-        
+
 		if ($redirect === true) {
 			$request->setModuleName('users');
 			$request->setControllerName('user');

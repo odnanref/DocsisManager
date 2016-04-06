@@ -27,7 +27,7 @@
 /**
  * Plugin for Auth takes extends Zend_Auth
  * 
- * @author andref 
+ * @author andref
  * @version $Id$
  */
 class Users_Plugin_Auth extends Zend_Auth
@@ -50,7 +50,7 @@ class Users_Plugin_Auth extends Zend_Auth
      * @var Far_Access_User
      */
     protected $_user;
-    
+
     private static $_instancefar;
 
     /**
@@ -138,7 +138,7 @@ class Users_Plugin_Auth extends Zend_Auth
                 ->setCredentialTreatment('MD5(?)')
         ;
         $result = parent::authenticate($adapter);
-        
+
         $data = null;
         if ($result->isValid()) {
             $storage = $this->getStorage();
