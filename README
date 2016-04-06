@@ -13,4 +13,28 @@ original.
 It originally ran on a VM with 512MB RAM 1 CPU qemu-kvm debian connected to a NFS
 server where the files were stored.
 
+Current code allows dependencies install via composer just run:
+
+*composer install*
+
+- Create directory cache/db with your webserver user permissions
+
+- import SQL dump to your named database the file is **install_mysql.sql** in the docs directory
+
+- Configure application/configs/application.ini
+
+- default user is admin , default password is adminadmin
+
+- Directory cm_templates holds default docsis templates for cable modems
+
+- Create "gen" directory in the root of the webapp this will keep generated docsis
+configuration, should be with permissions for your web server user
+
+- docs/README.txt has virtual host example for apache please enable URL_REWRITE 
+has this is a ZF1 install
+
+- docs has other details on install and configuration
+
+- YOU MUST HAVE INSTALLED docsis tool witch can be found in sourceforge
+
 
